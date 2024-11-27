@@ -78,12 +78,6 @@ def is_valid_r(r, q):
 def are_q_and_r_valid(w, q, r):
     return is_valid_q(w, q) and is_valid_r(r, q)
 
-# Hàm mã hóa
-def encrypt(message, public_key):
-    b = public_key
-    c = sum(mi * bi for mi, bi in zip(message, b))
-    return c
-
 # Hàm tính b 
 def calculate_b(w, q, r):
     # Kiểm tra đầu vào có hợp lệ không
@@ -95,26 +89,6 @@ def calculate_b(w, q, r):
     # Tính khóa công khai b
     b = [(r * wi) % q for wi in w]
     return b
- 
-# Hàm giải mã
-def decrypt(ciphertext, private_key):
-    w, q, r = private_key
-    # Tính nghịch đảo modulo của r
-    r_inv = mod_inverse(r, q)
-    if r_inv is None:
-        raise ValueError("Không tồn tại nghịch đảo modulo của r và q.")
-    # Tính c'
-    c_prime = (ciphertext * r_inv) % q
-    # Giải bài toán knapsack
-    message = []
-    for wi in reversed(w):
-        if c_prime >= wi:
-            message.append(1)
-            c_prime -= wi
-        else:
-            message.append(0)
-    message.reverse()
-    return message
 
 # Hàm chuyển đổi chuỗi thành danh sách bit
 def string_to_bits(s):
@@ -133,7 +107,7 @@ def bits_to_string(b):
         chars.append(chr(int(bits, 2)))
     return ''.join(chars)
 
-def encrypt_1(message, public_key):
+def encrypt(message, public_key):
     b = public_key
     encrypted_message = []
     
@@ -149,7 +123,7 @@ def encrypt_1(message, public_key):
     
     return encrypted_message
 
-def decrypt_1(ciphertexts, private_key):
+def decrypt(ciphertexts, private_key):
     w, q, r = private_key
     
     # Tính nghịch đảo modulo của r
@@ -184,7 +158,7 @@ def decrypt_1(ciphertexts, private_key):
 
 # Ví dụ sử dụng
 if __name__ == "__main__":
-    n = 16  # Số bit trong thông điệp
+    n = 8  # Số bit trong thông điệp
 
     # Tạo khóa
     private_key, public_key = generate_keys(n)
@@ -197,13 +171,11 @@ if __name__ == "__main__":
     print("Thông điệp gốc:", message_bits)
 
     # Mã hóa
-    ciphertext = encrypt_1(message_str, public_key)
+    ciphertext = encrypt(message_str, public_key)
     print("Bản mã:", ciphertext)
 
     # Giải mã
-    decrypted_bits = decrypt_1(ciphertext, private_key)
+    decrypted_bits = decrypt(ciphertext, private_key)
     print("Thông điệp giải mã:", decrypted_bits)
 
-    # Chuyển đổi lại thành chuỗi
-    #decrypted_message = bits_to_string(decrypted_bits)
-    #print("Thông điệp sau giải mã:", decrypted_message)
+   
