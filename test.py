@@ -21,3 +21,5 @@ if __name__ == "__main__":
     # Tạo khóa
     result = string_to_bits('AB')
     print("Result:", bits_to_string(result))
+    
+# git git 
