@@ -22,4 +22,4 @@ if __name__ == "__main__":
     result = string_to_bits('AB')
     print("Result:", bits_to_string(result))
     
-# git git 
+# git git git
